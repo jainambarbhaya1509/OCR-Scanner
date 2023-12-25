@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:qa_generator/result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -62,12 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               "QA-Generator",
               style: GoogleFonts.lato(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
-            const SizedBox(height: 40,),
+            const SizedBox(
+              height: 40,
+            ),
             _image != null
                 ? Image.file(
                     _image!,
@@ -112,6 +114,15 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_image != null) {
             final String recognizedText = await recognizeTextFromImage(_image!);
             logger.i(recognizedText);
+            var localContext = context;
+            await Future.delayed(Duration.zero);
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+              localContext,
+              MaterialPageRoute(
+                builder: (context) => ResultScreen(results: recognizedText,),
+              ),
+            );
           } else {
             logger.d("No Image Selected");
           }
