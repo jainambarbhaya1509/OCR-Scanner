@@ -55,13 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 30, 58, 81),
+      backgroundColor:
+          Colors.blueGrey, // const Color.fromARGB(255, 30, 58, 81),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "QA-Generator",
+              "OCR Scanner",
               style: GoogleFonts.lato(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -113,18 +114,25 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () async {
           if (_image != null) {
             final String recognizedText = await recognizeTextFromImage(_image!);
-            logger.i(recognizedText);
-            var localContext = context;
             await Future.delayed(Duration.zero);
             // ignore: use_build_context_synchronously
             Navigator.push(
-              localContext,
+              context,
               MaterialPageRoute(
-                builder: (context) => ResultScreen(results: recognizedText,),
+                builder: (ctx) => ResultScreen(
+                  results: recognizedText,
+                ),
               ),
             );
           } else {
-            logger.d("No Image Selected");
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  "No Image Selected",
+                  style: GoogleFonts.lato(),
+                ),
+              ),
+            );
           }
         },
         child: const Icon(Icons.check),
